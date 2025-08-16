@@ -1,0 +1,41 @@
+Steps to install and run docker
+
+create an dockerfile in your Spring project
+
+FROM openjdk:17
+COPY target/demo-app.jar  /usr/app/
+WORKDIR /usr/app/
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "demo-app.jar"]
+
+
+# Install Docker
+
+sudo yum update -y 
+sudo yum install docker -y
+sudo service docker start
+sudo usermod -aG docker ec2-user
+
+
+# Install Git and Maven
+sudo yum install -y git maven
+
+# Clone project
+git clone https://github.com/your-username/your-repo.git
+cd your-repo
+
+# Verify files
+ls -l
+cat Dockerfile
+
+# Build JAR
+mvn clean package
+
+# Build Docker image
+docker build -t your-app-name:latest .
+docker build -t anish146/test .
+
+
+# Run Docker container
+docker run -p 9090:9090 your-app-name:latest
+docker run -p 8080:8080 anish146/test
