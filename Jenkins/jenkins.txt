@@ -1,0 +1,92 @@
+
+Step - 1 : Create Linux VM in AWS
+
+Create Ubuntu VM using AWS EC2 (t2.medium, because jenkins require minimum 4gb RAM)
+
+
+Step-2 : Install Java using below commands
+
+sudo apt update
+sudo apt install fontconfig openjdk-17-jre
+java -version
+
+Step-3 : To Install Jenkins use the below commands
+
+sudo wget -O /usr/share/keyrings/jenkins-keyring.asc \
+  https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update
+sudo apt-get install Jenkins
+
+
+Step-4 : Start Jenkins services using below commands
+
+sudo systemctl enable jenkins
+sudo systemctl start Jenkins
+
+Step-5 : Verify Jenkins setup
+sudo systemctl status Jenkins
+
+###########################################################################################
+###########################################################################################
+
+
+Demo-Pipeline
+
+pipeline {
+    agent any
+    
+    tools {
+        maven 'x-3.9.9'  
+    }
+
+    stages {
+        stage('git clone') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pankajmutha14/docker-test.git'
+            }
+        }
+        stage('mvn') {
+            steps{
+                sh 'mvn clean test package'
+            }
+        }
+         stage('build image') {
+            steps{
+                sh 'docker build -t psait/test1 .'
+            }
+        }
+        stage('deployment'){
+            steps{
+                sh 'docker stop psait'
+                sh 'docker rm psait'
+                sh 'docker run -d -p 9090:8080 --name psait psait/test1'
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+# Check images
+docker images
+
+# Run the container (alternative to Jenkins)
+docker run -d -p 9090:8080 --name demo1 anish146/test
+
+
+
+
+if using Docker the first install docker
+curl -fsSL get.docker.com | /bin/bash
+sudo usermod -aG docker jenkins
+sudo usermod -aG docker ubuntu
+sudo systemctl restart jenkins
+sudo docker version
