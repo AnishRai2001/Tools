@@ -1,0 +1,28 @@
+
+What is Junit
+####################
+
+-> JUnit is a Java testing framework that helps you write and run unit tests — small, focused tests that verify the correctness of individual pieces of code (like a method or class) in isolation.
+
+-> It’s lightweight, fast, and integrates easily with build tools like Maven and Gradle.
+
+-> Versions: Latest major version is JUnit 5, which is more flexible and modular than JUnit 
+
+-> Assertions: Offers methods check expected outcome with actual outcome
+
+
+######################
+What is JaCoCo
+######################
+(status of code how much it was executed)
+-> JaCoCo tells you how much of your code was actually executed when you ran your tests.
+-> It works as plugin with Junit
+-> Often required for CI/CD quality gates (e.g., "Fail build if coverage < 80%").
+
+
+######################
+Why use Mockito?
+######################
+->   Mockito is one of the most popular mocking frameworks for Java
+-> In real applications, a class often depends on other components — like databases, web services, or other classes.
+-> When testing, you don’t want to call the real database or real API. Instead, you create mocks that simulate their behavior
