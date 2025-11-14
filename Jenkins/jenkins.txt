@@ -90,3 +90,56 @@ sudo usermod -aG docker jenkins
 sudo usermod -aG docker ubuntu
 sudo systemctl restart jenkins
 sudo docker version
+
+
+
+
+
+summary
+----------------------------------------------------------------------
+1. Developer pushes code
+
+Developer commits changes and pushes to GitHub (or any Git repository).
+
+2. Clone or pull latest code (optional)
+
+On the build server or local machine: git clone or git pull to get the latest code.
+
+3. Build the application
+
+For a Spring Boot project:
+
+mvn clean package
+
+
+This creates the JAR file in target/.
+
+4. Create Docker image
+
+Use a Dockerfile in the project:
+
+FROM openjdk:18-jdk-alpine
+COPY target/app.jar app.jar
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+
+Build Docker image:
+
+docker build -t username/appname:tag .
+
+5. Push Docker image to Docker Hub
+docker push username/appname:tag
+
+6. Prepare the new server instance
+
+Launch EC2 (or any VM/container host) if needed.
+
+7. Pull the latest Docker image
+docker pull username/appname:tag
+
+8. Stop the old container
+docker stop old_container_name
+docker rm old_container_name
+
+9. Run the updated container
+docker run -d --name appname -p 8080:8080 username/appname:tag
